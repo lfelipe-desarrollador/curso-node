@@ -14,7 +14,7 @@ const preguntas = [{
         },
         {
             value: 2,
-            name: `${'2.'.green} Mirar el clima`
+            name: `${'2.'.green} Historial`
         },
         {
             value: 0,
@@ -71,39 +71,34 @@ const leerInput = async ( mensaje ) => {
 
 }
 
-const listadoTareasBorrar = async(tareas = []) => {
+const listarLugares = async(lugares = []) => {
 
-    const choices = tareas.map( (tarea, i) => {
+    const choices = lugares.map( (lugar, i) => {
         
         const idx = `${i + 1}.`.green;
 
         return {
-            value: tarea.id,
-            name: `${idx} ${tarea.desc}`
+            value: lugar.id,
+            name: `${idx} ${lugar.nombre}`
         }
     });
 
     choices.unshift({
         value: '0',
         name:'0.'.green + 'Salir'
-    })
+    });
 
     const preguntas = [
         {
             type: 'list',
             name: 'id',
-            message: 'Borrar',
+            message: 'Seleccione lugar:',
             choices
         }
     ]
 
     const { id } = await inquirer.prompt(preguntas)
     return id;
-    // {
-    //     value: '1',
-    //     name: `${'1.'.green}. Crear tarea`
-    // },
-
 
 }
 
@@ -154,7 +149,7 @@ export  {
     inquirerMenu,
     pausa,
     leerInput,
-    listadoTareasBorrar,
+    listarLugares,
     confirmar,
     mostrarListadoChecklist
 }
