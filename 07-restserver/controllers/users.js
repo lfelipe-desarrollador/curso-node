@@ -1,6 +1,8 @@
-import { response } from 'express';
+import pkg from 'express';
+import Usuario from '../models/usuario.js';
+import bcrypt from 'bcryptjs';
 
-
+const { response }  = pkg;
 const usuariosGet = (req, res = response) => {
 
     const { q, nombre } = req.query;
@@ -23,13 +25,36 @@ const usuarioPut = (req, res = response) => {
     });
 };
 
-const usuarioPost = (req, res = response) => {
+const usuarioPost = async(req, res = response) => {
 
-    const body = req.body;
+
+    const { nombre, correo, password, rol } = req.body;
+    const user = new Usuario({
+        nombre,
+        correo,
+        password,
+        rol
+    });
+
+    //Verificar si el correo existe
+    const existeCorreo = await Usuario.findOne({ correo });
+    if(existeCorreo){
+        return res.status(400).json({
+            ok: false,
+            message: 'El correo ya existe'
+        });
+    };
+
+    //Encriptar contraseña
+    const salt = bcrypt.genSaltSync(10);
+    user.password = bcrypt.hashSync(password, salt);
+
+    //Guardar usuario
+    await user.save();
 
     res.json({
         message:"post API - controlador",
-        body
+        user
     });
 };
 
