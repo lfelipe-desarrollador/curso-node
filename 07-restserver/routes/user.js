@@ -1,6 +1,7 @@
 import  pkg from 'express';
 import pep from 'express-validator';
 import { usuarioDele, usuarioPost, usuarioPut, usuariosGet } from '../controllers/users.js';
+import { emailExistente, esRoleValido } from '../helpers/db-validators.js';
 import { validarCampos } from '../middlewares/validar-campos.js';
 
 const { Router } = pkg;
@@ -17,7 +18,8 @@ router.post("/", [
     check('nombre', 'El nombre es obligatorio').not().isEmpty(),
     check('password', 'El password es obligatorio y debe tener más de 6 letras').isLength({ min: 6 }),
     check('correo', 'El correo no es válido').isEmail(),
-    check('rol', 'No es un rol permitidio').isIn(['USER_ROLE', 'ADMIN_ROLE']),
+    check('correo').custom( emailExistente ),
+    check('rol').custom( esRoleValido ),
     validarCampos
 ],usuarioPost);
 

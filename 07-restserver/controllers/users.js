@@ -37,14 +37,8 @@ const usuarioPost = async(req, res = response) => {
     });
 
     //Verificar si el correo existe
-    const existeCorreo = await Usuario.findOne({ correo });
-    if(existeCorreo){
-        return res.status(400).json({
-            ok: false,
-            message: 'El correo ya existe'
-        });
-    };
-
+    
+    
     //Encriptar contraseña
     const salt = bcrypt.genSaltSync(10);
     user.password = bcrypt.hashSync(password, salt);
