@@ -14,11 +14,19 @@ const esRoleValido = async( rol = '' ) => {
 };
 
 
+
 const emailExistente = async( correo = '' ) => {
     const existeCorreo = await Usuario.findOne({ correo });
-    console.log(existeCorreo);
     if(existeCorreo){
         throw new Error(`El correo ${ correo } ya existe`);
+    };
+}
+
+
+const existeUsuarioPorId = async( id = '' ) => {
+    const existeid = await Usuario.findById( id );
+    if(!existeid){
+        throw new Error(`El id ${ id } no existe`);
     };
 }
 
@@ -26,5 +34,6 @@ const emailExistente = async( correo = '' ) => {
 
 export {
     esRoleValido,
-    emailExistente
+    emailExistente,
+    existeUsuarioPorId
 }

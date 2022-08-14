@@ -1,7 +1,7 @@
 import  pkg from 'express';
 import pep from 'express-validator';
 import { usuarioDele, usuarioPost, usuarioPut, usuariosGet } from '../controllers/users.js';
-import { emailExistente, esRoleValido } from '../helpers/db-validators.js';
+import { emailExistente, esRoleValido, existeUsuarioPorId } from '../helpers/db-validators.js';
 import { validarCampos } from '../middlewares/validar-campos.js';
 
 const { Router } = pkg;
@@ -12,7 +12,12 @@ const router = Router();
 
 router.get("/", usuariosGet);
 
-router.put("/:id", usuarioPut);
+router.put("/:id", [
+    check('id', 'No es un ID válido').isMongoId(),
+    check('id').custom( existeUsuarioPorId ),
+    check('rol').custom( esRoleValido ),
+    validarCampos
+],usuarioPut);
 
 router.post("/", [
     check('nombre', 'El nombre es obligatorio').not().isEmpty(),
@@ -23,7 +28,11 @@ router.post("/", [
     validarCampos
 ],usuarioPost);
 
-router.delete("/", usuarioDele);
+router.delete("/:id", [
+    check('id', 'No es un ID válido').isMongoId(),
+    check('id').custom( existeUsuarioPorId ),
+    validarCampos
+],usuarioDele);
 
 
 
