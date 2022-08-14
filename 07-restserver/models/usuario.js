@@ -3,6 +3,7 @@ const { Schema, model } = pkg;
 
 const UsuarioSchema = Schema({
 
+    
     nombre: {
         type: String,
         required: [true, 'El nombre es necesario']
@@ -19,7 +20,7 @@ const UsuarioSchema = Schema({
     img: {
         type: String,
     },
-    role: {
+    rol: {
         type: String,
         require: true,
         enum: ['USER_ROLE', 'ADMIN_ROLE'],
@@ -34,6 +35,16 @@ const UsuarioSchema = Schema({
     },
 
 });
+
+
+UsuarioSchema.methods.toJSON = function() {
+    const { __v, password, _id, ...user } = this.toObject();
+    user.uid = _id;
+
+    return user;
+}
+
+
 
 
 export default model('Usuario', UsuarioSchema);
