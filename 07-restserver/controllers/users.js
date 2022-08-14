@@ -80,6 +80,9 @@ const usuarioDele = async(req, res = response) => {
 
     const { id } = req.params;
 
+
+    const user = req.usuario;
+
     //Fisicamente lo borramos
     // const usuario = await Usuario.findByIdAndDelete( id );
 
@@ -87,7 +90,8 @@ const usuarioDele = async(req, res = response) => {
     const usuario = await Usuario.findByIdAndUpdate( id, { estado: false } );
 
     res.json({
-        usuario
+        usuario,
+        user
     });
 };
 

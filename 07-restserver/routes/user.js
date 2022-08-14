@@ -3,6 +3,10 @@ import pep from 'express-validator';
 import { usuarioDele, usuarioPost, usuarioPut, usuariosGet } from '../controllers/users.js';
 import { emailExistente, esRoleValido, existeUsuarioPorId } from '../helpers/db-validators.js';
 import { validarCampos } from '../middlewares/validar-campos.js';
+import validarJWT from '../middlewares/validar-jwt.js';
+import {tieneRole} from '../middlewares/validar-roles.js';
+
+
 
 const { Router } = pkg;
 const { check }  = pep;
@@ -29,6 +33,9 @@ router.post("/", [
 ],usuarioPost);
 
 router.delete("/:id", [
+    validarJWT,
+    // esAdminRole,
+    tieneRole('ADMIN_ROLE', 'VENTAS_ROLE'),
     check('id', 'No es un ID válido').isMongoId(),
     check('id').custom( existeUsuarioPorId ),
     validarCampos
