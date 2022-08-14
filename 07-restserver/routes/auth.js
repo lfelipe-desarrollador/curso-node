@@ -1,6 +1,6 @@
 import  pkg from 'express';
 import pep from 'express-validator';
-import { login } from '../controllers/auth.js';
+import { googleSingIn, login } from '../controllers/auth.js';
 import { validarCampos } from '../middlewares/validar-campos.js';
 
 const { Router } = pkg;
@@ -14,6 +14,11 @@ router.post('/login', [
     check('password', 'El password es obligatorio y debe tener más de 6 letras').isLength({ min: 6 }),
     validarCampos
 ],login);
+
+router.post('/google', [
+    check('id_token', 'El id_token es obligatorio').not().isEmpty(),
+    validarCampos
+],googleSingIn);
 
 
 
