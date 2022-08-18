@@ -4,6 +4,7 @@ import cors from "cors";
 import router from "../routes/user.js";
 import router2 from "../routes/auth.js";
 import router3 from "../routes/categorias.js";
+import router4 from "../routes/productos.js";
 import { dbConecction } from "../database/config.js";
 
 class Server{
@@ -15,6 +16,7 @@ class Server{
         this.usuariosRoutePath = '/api/usuarios';
         this.authPath = '/api/auth';
         this.categoryPath = '/api/categorias';
+        this.categoryPath = '/api/productos';
 
         //Conectar a base de datos
         this.conectarDB();
@@ -50,6 +52,7 @@ class Server{
         this.app.use(this.authPath, router2);
         this.app.use(this.usuariosRoutePath, router);
         this.app.use(this.categoryPath, router3);
+        this.app.use(this.categoryPath, router4);
     }
 
     config(){
