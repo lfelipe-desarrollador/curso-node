@@ -1,11 +1,12 @@
 import  pkg from 'express';
 import pep from 'express-validator';
-import { actualizarCategoria, 
-        borrarCategoria, 
-        crearCategoria,
-        obtenerCategoria, 
-        obtenerCategorias } from '../controllers/categorias.js';
-import { existeCategoriaPorId } from '../helpers/db-validators.js';
+
+import { crearProducto,
+        obtenerProducto, 
+        obtenerProductos, 
+        actualizarProducto, 
+        borrarProducto } from '../controllers/productos.js';
+import { existeCategoriaPorId, existeProductoPorId } from '../helpers/db-validators.js';
 import { validarCampos } from '../middlewares/validar-campos.js';
 import validarJWT from '../middlewares/validar-jwt.js';
 import { esAdminRole } from '../middlewares/validar-roles.js';
@@ -18,33 +19,35 @@ const router = Router();
 
 
 
-//Obtener todas las categorias - publico
+//Obtener todos los productos - publico
 router.get('/', [
 
-],obtenerCategorias)
+],obtenerProductos)
 
-//Obtener una categoria - publico
+//Obtener un producto- publico
 router.get('/:id', [
     check('id', 'No es un id válido de Mongo').isMongoId(),
-    check('id').custom(existeCategoriaPorId),
+    check('id').custom(existeProductoPorId),
     validarCampos
-],obtenerCategoria)
+],obtenerProducto)
 
-//Crear una categoria - privado(cualquier usuario)
+//Crear un producto - privado(cualquier usuario)
 router.post('/', [
     validarJWT,
     check('nombre', 'El nombre es obligatorio').not().isEmpty(),
+    check('categoria', 'No es un id de mongo').isMongoId(),
+    check('categoria').custom(existeCategoriaPorId),
     validarCampos
-],crearCategoria)
+],crearProducto)
 
 
 //Actualizar - privado(cualquier usuario)
 router.put('/:id', [
     validarJWT,
-    check('nombre', 'El nombre es obligatorio').not().isEmpty(),
-    check('id').custom(existeCategoriaPorId),
+    // check('categoria', 'No es un id de mongo').isMongoId(),
+    check('id').custom(existeProductoPorId),
     validarCampos
-],actualizarCategoria)
+],actualizarProducto)
 
 
 //Eliminar - privado(admin usuario)
@@ -52,9 +55,9 @@ router.delete('/:id', [
   validarJWT,
   esAdminRole,
   check('id', 'No es un id válido de Mongo').isMongoId(),
-  check('id').custom(existeCategoriaPorId),
+  check('id').custom(existeProductoPorId),
   validarCampos
-], borrarCategoria)
+], borrarProducto)
 
 
 
