@@ -62,7 +62,7 @@ const crearCategoria = async(req, res) => {
             msg: 'La categoria ya existe'
         });
     };
-
+    
     if (!categoriaDb) {
         const categoria = new Categoria({
             nombre,
@@ -72,6 +72,7 @@ const crearCategoria = async(req, res) => {
         res.status(201).json({
             message: 'Categoria creada correctamente'
         });
+        console.log('llego ahora por aqui');
     }
 
 };
